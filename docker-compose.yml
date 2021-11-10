@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+    # MongoDB
+    mongo:
+        container_name: mongodb
+        image: mongo:latest
+        env_file:
+            - .env
+        #volumes:
+        #    - ./data:/data/db
+        ports:
+            - "27017:27017"
+        networks:
+            - "qualiexplore_net"
+
+    # Initial Seed to QualiExplore Database
+    mongo-seed:
+        env_file:
+            - .env
+        build:
+            context: ./mongo_seed
+            dockerfile: Dockerfile
+            args:
+                - DATABASE_URI=$DATABASE_URI
+                - USERNAME=$MONGO_INITDB_ROOT_USERNAME
+                - PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
+        depends_on:
+            - mongo
+        networks:
+            - "qualiexplore_net"
+
+    gql-mongo:
+        container_name: graphqlBackend
+        image: hrabhijith/gql-mongo:quali
+        env_file:
+            - .env
+        ports:
+            - "5000:5000"
+        networks:
+            - "qualiexplore_net"
+
+    qualiexplore:
+        container_name: qualiexplore
+        image: hrabhijith/graphene-qualiexplore:latest
+        ports:
+            - "4200:80"
+        networks:
+            - "qualiexplore_net"
+
+        
+networks:
+    qualiexplore_net:
+        external: true
+    
