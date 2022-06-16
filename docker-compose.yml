@@ -30,14 +30,6 @@ services:
         networks:
             - "qualiexplore_net"
 
-    json-server:
-         container_name: jsonServerBackend
-         image: robinkuri/quali-json-server:latest
-         ports:
-            - "3000:3000"
-         networks:
-            - "qualiexplore_net"
-
     gql-mongo:
         container_name: graphqlBackend
         image: hrabhijith/gql-mongo:quali
@@ -50,7 +42,7 @@ services:
 
     qualiexplore:
         container_name: qualiexplore
-        image: robinkuri/qualiexpolire-with-editing-environment:latest
+        image: hrabhijith/graphene-qualiexplore:latest
         ports:
             - "4200:80"
         networks:
