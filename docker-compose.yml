@@ -50,7 +50,7 @@ services:
 
     qualiexplore:
         container_name: qualiexplore
-        image: robinkuri/qualiexpolire-with-editing-environment:latest
+        image: swel/qualiexplore-i4q:latest
         ports:
             - "4200:80"
         networks:
