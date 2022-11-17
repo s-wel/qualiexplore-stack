@@ -50,7 +50,7 @@ services:
 
     qualiexplore:
         container_name: qualiexplore
-        image: swel/qualiexplore-i4q:latest
+        image: swel/qualiexplore:i4q
         ports:
             - "4200:80"
         networks:
