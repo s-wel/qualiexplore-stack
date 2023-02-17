@@ -1,0 +1,9 @@
+node_modules
+package-lock.json
+package.json
+
+.env
+neo4j/data/*
+neo4j/logs/*
+
+!.gitkeep
