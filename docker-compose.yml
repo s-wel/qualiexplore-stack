@@ -5,59 +5,82 @@ services:
     mongo:
         container_name: mongodb
         image: mongo:latest
-        env_file:
-            - .env
-        #volumes:
-        #    - ./data:/data/db
+        restart: always
+        # volumes:
+        #     - ./data:/data/db
         ports:
             - "27017:27017"
-        networks:
-            - "qualiexplore_net"
 
-    # Initial Seed to QualiExplore Database
+    # Initial Seed to QualiExplore User Database
     mongo-seed:
-        env_file:
-            - .env
         build:
             context: ./mongo_seed
             dockerfile: Dockerfile
             args:
-                - DATABASE_URI=$DATABASE_URI
-                - USERNAME=$MONGO_INITDB_ROOT_USERNAME
-                - PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
+                - DATABASE_URI=mongodb://mongodb:27017/qualiexplore
+                - USERNAME=''
+                - PASSWORD=''
         depends_on:
             - mongo
-        networks:
-            - "qualiexplore_net"
-
-    json-server:
-         container_name: jsonServerBackend
-         image: robinkuri/quali-json-server:latest
-         ports:
-            - "3000:3000"
-         networks:
-            - "qualiexplore_net"
 
     gql-mongo:
         container_name: graphqlBackend
         image: hrabhijith/gql-mongo:quali
-        env_file:
-            - .env
+        environment:
+            - CONFIG_ENV=config.DevConfig
+            - JWT_SECRET_KEY=yoursecret
+            - DATABASE_URI=mongodb://mongodb:27017/qualiexplore
+            - DATABASE_NAME=qualiexplore
+            - HOST=localhost
+            - PORT=1000
         ports:
-            - "5000:5000"
-        networks:
-            - "qualiexplore_net"
+            - "1000:1000"
+
+    # Graph database
+    neo4j-server:
+        image: neo4j:4.4.16
+        restart: always
+        container_name: neo4j-server
+        # environment:
+        #     - DATABASE_USER_NAME=neo4j
+        #     - DATABASE_PWD=EQP5mv8iDb3fvq8
+        ports:
+        - "7474:7474"
+        - "7687:7687"
+        volumes:
+        - ./neo4j//conf:/conf
+        - ./neo4j/data:/data
+        - ./neo4j/import:/var/lib/neo4j/import
+        - ./neo4j/logs:/logs
+        - ./neo4j/plugins:/plugins
+
+    # Graphql server for graph database
+    apollo-server:
+        restart: always
+        container_name: apollo-server
+        build:
+            context: .
+            dockerfile: apollo-server/Dockerfile
+        environment:
+            - NEO4J_URL=bolt://localhost:7687
+            - NEO4J_USER=neo4j
+            - NEO4J_PASSWORD=EQP5mv8iDb3fvq8
+        ports:
+        - "4000:4000"
+        depends_on:
+        - neo4j-server
 
     qualiexplore:
         container_name: qualiexplore
-        image: swel/qualiexplore:i4q
+        image: qualiexplore # swel/qualiexplore:i4q
+        # environment:
+        #     - CONFIG_ENV=config.ProdConfig
+        #     - JWT_SECRET_KEY=yoursecret
+        #     - DATABASE_URI=mongodb://mongodb:27017/qualiexplore
+        #     - DATABASE_NAME=qualiexplore
+        #     - HOST=0.0.0.0
+        #     - PORT=5000
         ports:
             - "4200:80"
-        networks:
-            - "qualiexplore_net"
 
-        
-networks:
-    qualiexplore_net:
-        external: true
     
