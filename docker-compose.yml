@@ -32,9 +32,9 @@ services:
             - DATABASE_URI=mongodb://mongodb:27017/qualiexplore
             - DATABASE_NAME=qualiexplore
             - HOST=localhost
-            - PORT=1000
+            - PORT=5000
         ports:
-            - "1000:1000"
+            - "5000:5000"
 
     # Graph database
     neo4j-server:
@@ -48,7 +48,7 @@ services:
         - "7474:7474"
         - "7687:7687"
         volumes:
-        - ./neo4j//conf:/conf
+        - ./neo4j/conf:/conf
         - ./neo4j/data:/data
         - ./neo4j/import:/var/lib/neo4j/import
         - ./neo4j/logs:/logs
