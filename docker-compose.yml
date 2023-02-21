@@ -31,10 +31,23 @@ services:
             - JWT_SECRET_KEY=yoursecret
             - DATABASE_URI=mongodb://mongodb:27017/qualiexplore
             - DATABASE_NAME=qualiexplore
-            - HOST=localhost
+            - HOST=graphqlBackend
             - PORT=5000
         ports:
             - "5000:5000"
+
+    qualiexplore:
+        container_name: qualiexplore
+        image: qualiexplore # swel/qualiexplore:i4q
+        # environment:
+        #     - CONFIG_ENV=config.ProdConfig
+        #     - JWT_SECRET_KEY=yoursecret
+        #     - DATABASE_URI=mongodb://mongodb:27017/qualiexplore
+        #     - DATABASE_NAME=qualiexplore
+        #     - HOST=0.0.0.0
+        #     - PORT=5000
+        ports:
+            - "4200:80"
 
     # Graph database
     neo4j-server:
@@ -62,25 +75,10 @@ services:
             context: .
             dockerfile: apollo-server/Dockerfile
         environment:
-            - NEO4J_URL=bolt://localhost:7687
+            - NEO4J_URL=bolt://neo4j-server:7687
             - NEO4J_USER=neo4j
             - NEO4J_PASSWORD=EQP5mv8iDb3fvq8
         ports:
         - "4000:4000"
         depends_on:
         - neo4j-server
-
-    qualiexplore:
-        container_name: qualiexplore
-        image: qualiexplore # swel/qualiexplore:i4q
-        # environment:
-        #     - CONFIG_ENV=config.ProdConfig
-        #     - JWT_SECRET_KEY=yoursecret
-        #     - DATABASE_URI=mongodb://mongodb:27017/qualiexplore
-        #     - DATABASE_NAME=qualiexplore
-        #     - HOST=0.0.0.0
-        #     - PORT=5000
-        ports:
-            - "4200:80"
-
-    
