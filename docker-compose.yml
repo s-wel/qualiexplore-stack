@@ -39,13 +39,6 @@ services:
     qualiexplore:
         container_name: qualiexplore
         image: qualiexplore # swel/qualiexplore:i4q
-        # environment:
-        #     - CONFIG_ENV=config.ProdConfig
-        #     - JWT_SECRET_KEY=yoursecret
-        #     - DATABASE_URI=mongodb://mongodb:27017/qualiexplore
-        #     - DATABASE_NAME=qualiexplore
-        #     - HOST=0.0.0.0
-        #     - PORT=5000
         ports:
             - "4200:80"
 
@@ -54,9 +47,6 @@ services:
         image: neo4j:4.4.16
         restart: always
         container_name: neo4j-server
-        # environment:
-        #     - DATABASE_USER_NAME=neo4j
-        #     - DATABASE_PWD=EQP5mv8iDb3fvq8
         ports:
         - "7474:7474"
         - "7687:7687"
