@@ -14,7 +14,7 @@ This stack deploys:
 Use the following docker command to run this project:
 
  ``` shell
- docker-compose -f docker-compose.yml up -d
+ docker compose up -d
  ```
 
 ## Web-based MongoDB admin interface
@@ -46,3 +46,7 @@ Create a database named "qualiexplore" and a collection named "users".
 
 MongoDB does not have a default user. There is no user or password required in this stack.
 Add a user to increase the stack's security.
+
+## Development hints
+
+When you deploy this stack on a local machine, make sure that the HOST variable for the "gql-mongo" service is "graphqlBackend". Otherwise, local testing will cause a CORS error.
