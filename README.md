@@ -50,3 +50,10 @@ Add a user to increase the stack's security.
 ## Development hints
 
 When you deploy this stack on a local machine, make sure that the HOST variable for the "gql-mongo" service is "graphqlBackend". Otherwise, local testing will cause a CORS error.
+
+### Knowledge graph
+
+A graph organizes the knowledge for QualiExplore. Each tree element represents a single entity defined by its properties (e.g., name and description) and relations.
+This is necessary because each element exists within the context of its branch and might receive its own name or description.
+
+In future versions, similar elements could be associated through tags (which means a new type of node).
